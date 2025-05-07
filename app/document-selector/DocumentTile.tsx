@@ -5,17 +5,26 @@ interface DocumentTileProps {
   id: string;
   title: string;
   createdAt: string;
+  onDelete?: (id: string) => void;
 }
 
 export default function DocumentTile({
   id,
   title,
   createdAt,
+  onDelete,
 }: DocumentTileProps) {
   return (
-    <Link href={`/editor?docId=${id}`} className={styles.tile}>
-      <h2 className={styles.title}>{title}</h2>
-      <p className={styles.date}>{new Date(createdAt).toLocaleString()}</p>
-    </Link>
+    <div className={styles.tile}>
+      <Link href={`/editor?docId=${id}`}>
+        <h2 className={styles.title}>{title}</h2>
+        <p className={styles.date}>{new Date(createdAt).toLocaleString()}</p>
+      </Link>
+      {onDelete && (
+        <button onClick={() => onDelete(id)} className={styles.deleteButton}>
+          Delete
+        </button>
+      )}
+    </div>
   );
 }

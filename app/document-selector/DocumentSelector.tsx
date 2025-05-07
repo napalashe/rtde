@@ -31,6 +31,20 @@ export default function DocumentSelector({ signOut }: DocumentSelectorProps) {
     }
   };
 
+  const deleteDocument = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this document?"))
+      return;
+    try {
+      await fetch("/api/deleteDocument", {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+      });
+      fetchDocuments(); // Refresh the list
+    } catch (error) {
+      console.error("Failed to delete document:", error);
+    }
+  };
+
   const createDocument = async () => {
     const title = prompt("Enter a title for the new document:");
     if (!title) return;
@@ -40,10 +54,15 @@ export default function DocumentSelector({ signOut }: DocumentSelectorProps) {
         method: "POST",
         body: JSON.stringify({ title }),
       });
-
+      if (!response.ok) {
+        const err = await response.json();
+        alert(err.error || "Failed to create document");
+        return;
+      }
       const newDoc = await response.json();
       window.location.href = `/editor?docId=${newDoc.id}`;
     } catch (error) {
+      alert("Failed to create document");
       console.error("Failed to create document:", error);
     }
   };
@@ -79,6 +98,7 @@ export default function DocumentSelector({ signOut }: DocumentSelectorProps) {
                 id={doc.id}
                 title={doc.title}
                 createdAt={doc.createdAt}
+                onDelete={deleteDocument}
               />
             ))
           )}
