@@ -16,6 +16,10 @@ export async function POST(req: NextRequest) {
     if (errors) {
       return NextResponse.json({ error: errors }, { status: 500 });
     }
+    if (data.error) {
+      alert(data.error);
+      return NextResponse.json({ error: data.error }, { status: 500 });
+    }
     return NextResponse.json(data);
   } catch (err) {
     const errorMessage =
