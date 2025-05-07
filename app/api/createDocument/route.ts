@@ -18,9 +18,8 @@ export async function POST(req: NextRequest) {
     }
     return NextResponse.json(data);
   } catch (err) {
-    return NextResponse.json(
-      { error: err?.message || "Failed to create document" },
-      { status: 500 }
-    );
+    const errorMessage =
+      err instanceof Error ? err.message : "Failed to create document";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
