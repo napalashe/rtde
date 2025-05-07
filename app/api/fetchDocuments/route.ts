@@ -11,9 +11,8 @@ export async function GET() {
     }
     return NextResponse.json(data);
   } catch (err) {
-    return NextResponse.json(
-      { error: err?.message || "Failed to fetch documents" },
-      { status: 500 }
-    );
+    const errorMessage =
+      err instanceof Error ? err.message : "Failed to fetch documents";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

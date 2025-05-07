@@ -18,9 +18,8 @@ export async function DELETE(req: NextRequest) {
     }
     return NextResponse.json({ message: "Document deleted", data });
   } catch (err) {
-    return NextResponse.json(
-      { error: err?.message || "Failed to delete document" },
-      { status: 500 }
-    );
+    const errorMessage =
+      err instanceof Error ? err.message : "Failed to delete document";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
