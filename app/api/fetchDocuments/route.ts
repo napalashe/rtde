@@ -9,7 +9,8 @@ export async function GET() {
     if (errors) {
       return NextResponse.json({ error: errors }, { status: 500 });
     }
-    return NextResponse.json(data);
+    // Ensure data is always an array
+    return NextResponse.json(Array.isArray(data) ? data : []);
   } catch (err) {
     const errorMessage =
       err instanceof Error ? err.message : "Failed to fetch documents";
