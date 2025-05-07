@@ -23,9 +23,16 @@ export default function DocumentSelector({ signOut }: DocumentSelectorProps) {
     try {
       const response = await fetch("/api/fetchDocuments");
       const data = await response.json();
-      setDocuments(data);
+      console.log("Fetched documents data:", data); // Debug log
+      if (data && data.error) {
+        alert(data.error);
+        setDocuments([]);
+        return;
+      }
+      setDocuments(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Failed to fetch documents:", error);
+      setDocuments([]);
     } finally {
       setLoading(false);
     }
